@@ -3,17 +3,20 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Jobs\ImporterJob;
-use App\Services;
+use App\Player;
+use App\Jobs\ImportJob;
+use App\Services\Importer;
+use App\Services\Parsers\JSONParser;
+use App\Services\Parsers\XMLParser;
 
-class ImporterCommand extends Command
+class ImportPlayerCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'player:import {--F|format=json} {--url=https://fantasy.premierleague.com/api/bootstrap-static/}';
+    protected $signature = 'import:player {--F|format=json} {--url=https://fantasy.premierleague.com/api/bootstrap-static/}';
 
     /**
      * The console command description.
@@ -43,10 +46,18 @@ class ImporterCommand extends Command
         $url = $this->option('url');
 
         if (in_array($format, ['json', 'xml']) && $url) {
-            $this->info("Importing using {$format} format");
-            $parserClass = 'App\\Services\\' . strtoupper($format) . 'Parser';
-            $parser = new $parserClass($url);
-            ImporterJob::dispatch($parser);
+            $this->info("Importing players using {$format} format");
+            
+            switch ($format) {
+                case 'json':
+                    $parser = new JSONParser;
+                    break;
+                case 'xml':
+                    $parser = new XMLParser;
+            }
+
+            $importer = new Importer($parser, $url);
+            ImportJob::dispatch($importer, Player::class);
             $this->info('Players successfully imported');
         } else {
             $this->error('format not available');

@@ -2,29 +2,40 @@
 
 namespace App\Services;
 
-use App\Player;
+use Illuminate\Database\Eloquent\Model;
+use App\Services\Parsers\Parser;
 
 class Importer
 {
-    protected $data;
+    protected $parser;
+    protected $url;
 
-    public function __construct(Array $data)
+    public function __construct(Parser $parser, $url)
     {
-        $this->data = $data;
+        $this->parser = $parser;
+        $this->url = $url;
     }
 
-    public function save()
+    public function fetch()
     {
-        $limit = 0;
+        return file_get_contents($this->url);
+    }
 
-        foreach ($this->data as $key => $val) {
+    public function import(Model $model)
+    {
+        $data = $this->parser->parse($this->fetch());
 
-            if ($limit < 100) {
-                Player::updateOrCreate(['id' => $val['id']], $val);
-                $limit++;
-            } else {
-                break;
+        if (is_array($data)) {
+            foreach ($data as $key => $val) {
+
+                if ($key < 100) {
+                    $model::updateOrCreate(['id' => $val['id']], $val);
+                } else {
+                    break;
+                }
             }
+        } else {
+            throw new Exception('parsed data should be in array format');
         }
     }
 }

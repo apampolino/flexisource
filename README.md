@@ -1,10 +1,12 @@
 # flexisource
 code challenge
 
-kindly run php artisan migrate
+1. Create database
 
-php artisan player:import to import players from the given link
+2. Run php artisan migrate
 
-localhost/players for list
+3. php artisan import:players to import players from the given link
 
-localhost/players/1 for player info
+see /players for list and /players/{id} for player details
+
+see app/Console/Kernel.php for cron schedule

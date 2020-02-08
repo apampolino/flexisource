@@ -8,14 +8,6 @@ use Illuminate\Http\Request;
 
 class PlayerController extends Controller
 {
-
-    protected $service;
-
-    public function __construct()
-    {
-        $this->service = new PlayerService;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -23,7 +15,7 @@ class PlayerController extends Controller
      */
     public function index()
     {
-        return $this->service->getAllPlayers();
+        return Player::getFullnames()->get();
     }
 
     /**

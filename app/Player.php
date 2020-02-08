@@ -64,4 +64,8 @@ class Player extends Model
                     ];
     public $timestamps = false;
 
+    public function scopeGetFullnames($query)
+    {
+        return $query->selectRaw("id, CONCAT(first_name, ' ', second_name) as fullname");
+    }
 }

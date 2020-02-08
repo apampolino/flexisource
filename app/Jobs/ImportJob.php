@@ -8,23 +8,24 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-use App\Contracts\ParserContract;
 use App\Services\Importer;
 
-class ImporterJob implements ShouldQueue
+class ImportJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $parser;
+    protected $importer;
+    protected $model;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(ParserContract $parser)
+    public function __construct(Importer $importer, $model)
     {
-        $this->parser = $parser;
+        $this->importer = $importer;
+        $this->model = $model;
     }
 
     /**
@@ -34,8 +35,6 @@ class ImporterJob implements ShouldQueue
      */
     public function handle()
     {
-        $data = $this->parser->getData();
-        $importer = new Importer($data);
-        $importer->save();
+        $this->importer->import(new $this->model);
     }
 }
