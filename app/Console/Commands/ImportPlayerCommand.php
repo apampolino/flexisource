@@ -56,8 +56,9 @@ class ImportPlayerCommand extends Command
                     $parser = new XMLParser;
             }
 
-            $importer = new Importer($parser, $url);
-            ImportJob::dispatch($importer, Player::class);
+            $model = new Player;
+            $importer = new Importer($parser, $model, $url);
+            ImportJob::dispatch($importer);
             $this->info('Players successfully imported');
         } else {
             $this->error('format not available');

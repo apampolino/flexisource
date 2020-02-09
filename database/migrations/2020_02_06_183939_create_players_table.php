@@ -30,7 +30,7 @@ class CreatePlayersTable extends Migration
             $table->integer('event_points')->default(0)->nullable(true);
             $table->string('first_name');
             $table->double('form', 8, 2)->default(0)->nullable(true);
-            $table->string('id');
+            $table->bigIncrements('id');
             $table->boolean('in_dreamteam');
             $table->string('news')->nullable(true);
             $table->string('news_added')->nullable(true);

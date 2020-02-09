@@ -8,11 +8,13 @@ use App\Services\Parsers\Parser;
 class Importer
 {
     protected $parser;
+    protected $model;
     protected $url;
 
-    public function __construct(Parser $parser, $url)
+    public function __construct(Parser $parser, Model $model, $url)
     {
         $this->parser = $parser;
+        $this->model = $model;
         $this->url = $url;
     }
 
@@ -21,7 +23,7 @@ class Importer
         return file_get_contents($this->url);
     }
 
-    public function import(Model $model)
+    public function import()
     {
         $data = $this->parser->parse($this->fetch());
 
@@ -29,7 +31,7 @@ class Importer
             foreach ($data as $key => $val) {
 
                 if ($key < 100) {
-                    $model::updateOrCreate(['id' => $val['id']], $val);
+                    $this->model::updateOrCreate(['id' => $val['id']], $val);
                 } else {
                     break;
                 }

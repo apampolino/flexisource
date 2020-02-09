@@ -15,17 +15,15 @@ class ImportJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $importer;
-    protected $model;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Importer $importer, $model)
+    public function __construct(Importer $importer)
     {
         $this->importer = $importer;
-        $this->model = $model;
     }
 
     /**
@@ -35,6 +33,6 @@ class ImportJob implements ShouldQueue
      */
     public function handle()
     {
-        $this->importer->import(new $this->model);
+        $this->importer->import();
     }
 }
