@@ -6,8 +6,8 @@ use Illuminate\Console\Command;
 use App\Player;
 use App\Jobs\ImportJob;
 use App\Services\Importer;
-use App\Services\Parsers\JSONParser;
-use App\Services\Parsers\XMLParser;
+use App\Parsers\JSONParser;
+use App\Parsers\XMLParser;
 
 class ImportPlayerCommand extends Command
 {
@@ -59,7 +59,6 @@ class ImportPlayerCommand extends Command
             $model = new Player;
             $importer = new Importer($parser, $model, $url);
             ImportJob::dispatch($importer);
-            $this->info('Players successfully imported');
         } else {
             $this->error('format not available');
         }

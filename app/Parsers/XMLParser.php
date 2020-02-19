@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services\Parsers;
+namespace App\Parsers;
 
-use App\Services\Parsers\Parser;
+use App\Contracts\ParserInterface;
 
-class XMLParser implements Parser
+class XMLParser implements ParserInterface
 {
     public function parse($xml)
     {

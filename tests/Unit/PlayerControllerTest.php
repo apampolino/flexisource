@@ -25,4 +25,11 @@ class PlayerControllerTest extends TestCase
         $data = $controller->show($player);
         $this->assertNotEmpty($data);
     }
+
+    public function testPlayerNotExist()
+    {
+        $controller = new PlayerController;
+        $data = json_decode($controller->show(100)->getContent(), true);
+        $this->assertEquals('Player not found', $data['message']);
+    }
 }

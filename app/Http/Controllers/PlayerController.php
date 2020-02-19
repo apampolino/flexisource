@@ -45,9 +45,16 @@ class PlayerController extends Controller
      * @param  \App\Player  $player
      * @return \Illuminate\Http\Response
      */
-    public function show(Player $player)
+    public function show($player)
     {
-        return $player;
+        $player = Player::find($player);
+
+        if ($player) {
+
+            return $player;
+        }
+
+        return response(['message' => 'Player not found']);
     }
 
     /**

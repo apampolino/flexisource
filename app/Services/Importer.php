@@ -3,7 +3,8 @@
 namespace App\Services;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Services\Parsers\Parser;
+use App\Contracts\ParserInterface;
+use \Exception;
 
 class Importer
 {
@@ -11,7 +12,7 @@ class Importer
     protected $model;
     protected $url;
 
-    public function __construct(Parser $parser, Model $model, $url)
+    public function __construct(ParserInterface $parser, Model $model, $url)
     {
         $this->parser = $parser;
         $this->model = $model;
